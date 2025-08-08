@@ -1,4 +1,4 @@
-if SHIELD_NICE_VIEW_90BORN
+if SHIELD_NICE_VIEW_NOSTALGIA
     config LV_Z_VDB_SIZE
         default 100
 
