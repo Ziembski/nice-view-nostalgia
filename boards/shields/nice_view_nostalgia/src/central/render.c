@@ -126,6 +126,6 @@ void render_main() {
     // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
     // forces us to redraw the background on every render instead of having it
     // on a layer underneath.
-    draw_animation2(c_main_canvas, states.c_animation_index);
+    draw_animation1(c_main_canvas, states.c_animation_index);
 #endif
 }

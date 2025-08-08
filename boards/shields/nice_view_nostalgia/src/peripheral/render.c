@@ -11,6 +11,13 @@
 #include "../../include/utils/draw_bluetooth_logo.h"
 #include "../../include/utils/rotate_connectivity_canvas.h"
 
+
+void render_main() {
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_BACKGROUND)
+    draw_animation1(p_main_canvas, states.p_animation_index);
+#endif
+}
+
 void render_battery() {
     lv_canvas_fill_bg(battery_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
 
@@ -27,10 +34,4 @@ void render_connectivity() {
     }
 
     rotate_connectivity_canvas();
-}
-
-void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_BACKGROUND)
-    draw_animation1(p_main_canvas, states.p_animation_index);
-#endif
 }
