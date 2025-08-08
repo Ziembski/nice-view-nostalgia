@@ -9,7 +9,7 @@
 
 #define TOP_WIDTH 25
 
-#define LAYER_WIDTH 1
+#define LAYER_WIDTH 20
 
 #define BATTERY_CANVAS_WIDTH (TOP_WIDTH)
 #define BATTERY_CANVAS_HEIGHT (SCREEN_HEIGHT / 2)
@@ -37,7 +37,7 @@ extern lv_obj_t* layer_canvas;
 extern lv_color_t layer_canvas_buffer[];
 
 extern lv_obj_t* c_main_canvas;
-extern lv_color_t main_canvas_buffer[];
+extern lv_color_t c_main_canvas_buffer[];
 
 extern lv_obj_t* p_main_canvas;
-extern lv_color_t main_canvas_buffer[];
+extern lv_color_t p_main_canvas_buffer[];
