@@ -1,4 +1,4 @@
-if SHIELD_NICE_VIEW_NOSTALGIA
+if SHIELD_NICE_VIEW_ELEMENTAL
     config LV_Z_VDB_SIZE
         default 100
 
@@ -52,4 +52,11 @@ if SHIELD_NICE_VIEW_NOSTALGIA
         bool "Displays a background."
         default y
 
+    config NICE_VIEW_NOSTALGIA_OUTLINE
+        bool "Displays an outline around the shadow of the layer name."
+        default y
+
+    config NICE_VIEW_NOSTALGIA_SHADOW
+        bool "Displays a shadow around the layer name."
+        default y
 endif

@@ -3,7 +3,7 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
 
   zephyr_library_sources(
     ./src/main.c
-    ./src/fonts/pixel_custom.c
+    ./src/fonts/custom_font_22.c
     ./src/images/animation1_0.c
     ./src/images/animation1_1.c
     ./src/images/animation1_2.c
@@ -36,7 +36,7 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
     ./src/images/animation1_29.c
     ./src/images/animation1_30.c
     ./src/images/animation1_31.c
-    ./src/images/animation2_1.c    
+    ./src/images/animation2_1.c 
 
     ./src/images/bluetooth_logo_outlined.c
     ./src/images/bluetooth_logo.c
@@ -50,7 +50,7 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
     ./src/utils/draw_bluetooth_searching.c
     ./src/utils/draw_usb_logo.c
     ./src/utils/rotate_connectivity_canvas.c
-    ./src/utils/rotate_layer_canvas.c
+    ./src/utils/rotate_main_canvas.c
   )
 
   if(NOT CONFIG_ZMK_SPLIT OR CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
@@ -59,7 +59,9 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
       ./src/central/render.c
       # These are not included on the peripheral since they are only used for
       # displaying the layer name.
-      ./src/fonts/pixel_custom.c
+      ./src/fonts/custom_font_44.c
+      ./src/fonts/custom_font_shadow.c
+      ./src/fonts/custom_font_outline.c
     )
   else()
     zephyr_library_sources(

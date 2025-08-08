@@ -7,7 +7,10 @@
 #include <zephyr/sys/util.h>
 #include "../../include/colors.h"
 #include "../../include/central/initialize_listeners.h"
-#include "../../include/fonts/pixel_custom.h"
+#include "../../include/fonts/custom_font_22.h"
+#include "../../include/fonts/custom_font_44.h"
+#include "../../include/fonts/custom_font_shadow.h"
+#include "../../include/fonts/custom_font_outline.h"
 #include "../../include/main.h"
 #include "../../include/utils/draw_battery.h"
 #include "../../include/utils/draw_animation2.h"
@@ -16,7 +19,7 @@
 #include "../../include/utils/draw_bluetooth_logo.h"
 #include "../../include/utils/draw_usb_logo.h"
 #include "../../include/utils/rotate_connectivity_canvas.h"
-#include "../../include/utils/rotate_layer_canvas.h"
+#include "../../include/utils/rotate_main_canvas.h"
 
 void render_battery() {
     lv_canvas_fill_bg(battery_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
@@ -40,12 +43,12 @@ static void render_bluetooth_profile_index() {
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
     label_dsc.color = FOREGROUND_COLOR;
-    label_dsc.font = &pixel_custom;
+    label_dsc.font = &custom_font_22;
     label_dsc.align = LV_TEXT_ALIGN_RIGHT;
 
-    static const unsigned pixel_custom_height = 5;
-    static const unsigned padding_y = (CONNECTIVITY_CANVAS_AVAILABLE_HEIGHT - pixel_custom_height) / 2;
-    static const unsigned width = CONNECTIVITY_CANVAS_WIDTH - 5;
+    static const unsigned custom_font_22_height = 19;
+    static const unsigned padding_y = (CONNECTIVITY_CANVAS_AVAILABLE_HEIGHT - custom_font_22_height) / 2;
+    static const unsigned width = CONNECTIVITY_CANVAS_WIDTH - 18;
     static const char bluetooth_profile_label[5][2] = {"1", "2", "3", "4", "5"};
     const char* label = bluetooth_profile_label[states.connectivity.active_profile_index];
    
@@ -78,7 +81,13 @@ void render_connectivity() {
     rotate_connectivity_canvas();
 }
 
-void render_layer() {
+void render_main() {
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_BACKGROUND)
+    // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
+    // forces us to redraw the background on every render instead of having it
+    // on a layer underneath.
+    draw_animation2(c_main_canvas, states.c_animation_index);
+#endif
 
     // Capitalize the layer name if given or use the layer number otherwise.
     char* text = NULL;
@@ -97,19 +106,55 @@ void render_layer() {
     // Magic number. The height of the font from the baseline to the ascender
     // height is 34px, but halving the space remaining of the full height gives
     // us another value ((68px - 34px) / 2 = 17px). 
-    static const unsigned text_y_offset = 0;
+    static const unsigned text_y_offset = 5;
+
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_OUTLINE)
+    lv_draw_label_dsc_t outline_dsc;
+    lv_draw_label_dsc_init(&outline_dsc);
+    outline_dsc.color = FOREGROUND_COLOR;
+    outline_dsc.font = &custom_font_outline;
+    outline_dsc.align = LV_TEXT_ALIGN_CENTER;
+
+    lv_canvas_draw_text(
+        main_canvas,
+        0,
+        // Magic number offset. We would think that the fonts would line up
+        // perfectly, because of how they were created, but no.
+        text_y_offset - 1,
+        MAIN_CANVAS_WIDTH,
+        &outline_dsc,
+        text
+    );
+#endif
+
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_SHADOW)
+    lv_draw_label_dsc_t shadow_dsc;
+    lv_draw_label_dsc_init(&shadow_dsc);
+    shadow_dsc.color = BACKGROUND_COLOR;
+    shadow_dsc.font = &custom_font_shadow;
+    shadow_dsc.align = LV_TEXT_ALIGN_CENTER;
+
+    lv_canvas_draw_text(
+        main_canvas,
+        0,
+        text_y_offset,
+        MAIN_CANVAS_WIDTH,
+        &shadow_dsc,
+        text
+    );
+#endif
 
     lv_draw_label_dsc_t layer_name_dsc;
     lv_draw_label_dsc_init(&layer_name_dsc);
     layer_name_dsc.color = FOREGROUND_COLOR;
-    layer_name_dsc.font = &pixel_custom;
+    layer_name_dsc.font = &custom_font_44;
     layer_name_dsc.align = LV_TEXT_ALIGN_LEFT;
 
     lv_canvas_draw_text(
-        layer_canvas,
+        main_canvas,
         0,
         text_y_offset,
-        LAYER_CANVAS_WIDTH,
+        MAIN_CANVAS_WIDTH,
         &layer_name_dsc,
         text
     );
@@ -117,15 +162,5 @@ void render_layer() {
     free(text);
     text = NULL;
     
-//    rotate_layer_canvas();
-}
-
-
-void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_BACKGROUND)
-    // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
-    // forces us to redraw the background on every render instead of having it
-    // on a layer underneath.
-    draw_animation1(c_main_canvas, states.c_animation_index);
-#endif
+//    rotate_main_canvas();
 }

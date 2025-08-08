@@ -22,7 +22,7 @@
 struct states states;
 
 #if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_ANIMATION)
-static void c_animation_update_timer(lv_timer_t* timer)
+static void background_update_timer(lv_timer_t* timer)
 {
     states.c_animation_index = (states.c_animation_index + 1) % UINT_MAX;
 
@@ -33,7 +33,7 @@ lv_timer_t * timer;
 
 static void start_timer() {
     // Call the `background_update_timer` function every configured interval.
-    timer = lv_timer_create(c_animation_update_timer, CONFIG_NICE_VIEW_NOSTALGIA_C_ANIMATION_FRAME_MS, NULL);
+    timer = lv_timer_create(background_update_timer, CONFIG_NICE_VIEW_C_ANIMATION_ANIMATION_FRAME_MS, NULL);
 }
 
 // We want to pause the animation when the keyboard is idling.
@@ -180,7 +180,7 @@ ZMK_SUBSCRIPTION(
 static void layer_state_update_callback(struct layer_state state) {
     states.layer = state;
 
-    render_layer();
+    render_main();
 }
 
 // Retrieve the data we want from the event

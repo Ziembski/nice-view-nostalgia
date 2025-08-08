@@ -1,6 +1,6 @@
 file_format: "1"
 id: nice_view_nostalgia
-name: nice!view nostalgia
+name: nice!view Nostalgia
 type: shield
 url: https://github.com/Ziembski/nice-view-nostalgia
 requires: [nice_view_header]
