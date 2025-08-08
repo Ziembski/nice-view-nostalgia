@@ -15,7 +15,7 @@
 
 struct states states;
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_90'BORN_ANIMATION)
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_ANIMATION)
 void p_animation_update_timer(lv_timer_t* timer)
 {
     states.p_animation_index = (states.p_animation_index + 1) % UINT_MAX;
@@ -161,7 +161,7 @@ void initialize_listeners() {
 	
 	
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_90'BORN_ANIMATION)
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_ANIMATION)
     start_timer();
 #endif
 }

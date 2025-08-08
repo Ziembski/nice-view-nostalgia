@@ -122,7 +122,7 @@ void render_layer() {
 
 
 void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_90'BORN_BACKGROUND)
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_BACKGROUND)
     // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
     // forces us to redraw the background on every render instead of having it
     // on a layer underneath.

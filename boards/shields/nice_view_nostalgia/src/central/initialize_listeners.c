@@ -21,7 +21,7 @@
 
 struct states states;
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_90'BORN_ANIMATION)
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_ANIMATION)
 static void c_animation_update_timer(lv_timer_t* timer)
 {
     states.c_animation_index = (states.c_animation_index + 1) % UINT_MAX;
@@ -219,7 +219,7 @@ void initialize_listeners() {
     widget_connectivity_state_update_init();
     widget_battery_state_update_init();
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_90'BORN_ANIMATION)
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_ANIMATION)
     start_timer();
 #endif
 }

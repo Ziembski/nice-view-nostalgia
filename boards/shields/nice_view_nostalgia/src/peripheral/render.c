@@ -30,7 +30,7 @@ void render_connectivity() {
 }
 
 void render_main() {
-#if IS_ENABLED(CONFIG_NICE_VIEW_90'BORN_BACKGROUND)
+#if IS_ENABLED(CONFIG_NICE_VIEW_NOSTALGIA_BACKGROUND)
     draw_animation1(main_canvas, states.p_animation_index);
 #endif
 }
