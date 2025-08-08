@@ -27,7 +27,7 @@ lv_timer_t * timer;
 
 static void start_timer() {
     // Call the `p_animation_update_timer` function every configured interval.
-    timer = lv_timer_create(p_animation_update_timer, CONFIG_NICE_VIEW_90'BORN_P_ANIMATION_FRAME_MS, NULL);
+    timer = lv_timer_create(p_animation_update_timer, CONFIG_NICE_VIEW_NOSTALGIA_P_ANIMATION_FRAME_MS, NULL);
 }
 
 // We want to pause the animation when the keyboard is idling.

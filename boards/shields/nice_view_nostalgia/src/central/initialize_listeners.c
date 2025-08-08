@@ -33,7 +33,7 @@ lv_timer_t * timer;
 
 static void start_timer() {
     // Call the `background_update_timer` function every configured interval.
-    timer = lv_timer_create(c_animation_update_timer, CONFIG_NICE_VIEW_90'BORN_C_ANIMATION_FRAME_MS, NULL);
+    timer = lv_timer_create(c_animation_update_timer, CONFIG_NICE_VIEW_NOSTALGIA_C_ANIMATION_FRAME_MS, NULL);
 }
 
 // We want to pause the animation when the keyboard is idling.
