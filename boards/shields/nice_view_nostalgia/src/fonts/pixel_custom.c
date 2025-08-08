@@ -1,18 +1,18 @@
 /*******************************************************************************
- * Size: 22 px
+ * Size: 5 px
  * Bpp: 1
- * Opts: --bpp 1 --size 22 --no-compress --font Custom Font.woff --range 32-127 --format lvgl -o custom_font_22.c
+ * Opts: --bpp 1 --size 22 --no-compress --font Custom Font.woff --range 32-127 --format lvgl -o pixel_custom.c
  ******************************************************************************/
 
-#include "../../include/fonts/custom_font_22.h"
+#include "../../include/fonts/pixel_custom.h"
 
 #include <lvgl.h>
 
-#ifndef CUSTOM_FONT_22
-#define CUSTOM_FONT_22 1
+#ifndef pixel_custom
+#define pixel_custom 1
 #endif
 
-#if CUSTOM_FONT_22
+#if pixel_custom
 
 /*-----------------
  *    BITMAPS
@@ -722,9 +722,9 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
 
 /*Initialize a public general font descriptor*/
 #if LVGL_VERSION_MAJOR >= 8
-const lv_font_t custom_font_22 = {
+const lv_font_t pixel_custom= {
 #else
-lv_font_t custom_font_22 = {
+lv_font_t pixel_custom = {
 #endif
     .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
     .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
@@ -744,4 +744,4 @@ lv_font_t custom_font_22 = {
     .user_data = NULL,
 };
 
-#endif /*#if CUSTOM_FONT_22*/
+#endif /*#if pixel_custom*/
