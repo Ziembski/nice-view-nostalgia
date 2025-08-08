@@ -43,9 +43,9 @@ static void render_bluetooth_profile_index() {
     label_dsc.font = &pixel_custom;
     label_dsc.align = LV_TEXT_ALIGN_RIGHT;
 
-    static const unsigned pixel_custom_height = 19;
+    static const unsigned pixel_custom_height = 5;
     static const unsigned padding_y = (CONNECTIVITY_CANVAS_AVAILABLE_HEIGHT - pixel_custom_height) / 2;
-    static const unsigned width = CONNECTIVITY_CANVAS_WIDTH - 18;
+    static const unsigned width = CONNECTIVITY_CANVAS_WIDTH - 5;
     static const char bluetooth_profile_label[5][2] = {"1", "2", "3", "4", "5"};
     const char* label = bluetooth_profile_label[states.connectivity.active_profile_index];
    
@@ -103,7 +103,7 @@ void render_layer() {
     lv_draw_label_dsc_init(&layer_name_dsc);
     layer_name_dsc.color = FOREGROUND_COLOR;
     layer_name_dsc.font = &pixel_custom;
-    layer_name_dsc.align = LV_TEXT_ALIGN_CENTER;
+    layer_name_dsc.align = LV_TEXT_ALIGN_LEFT;
 
     lv_canvas_draw_text(
         layer_canvas,
@@ -117,7 +117,7 @@ void render_layer() {
     free(text);
     text = NULL;
     
-    rotate_layer_canvas();
+//    rotate_layer_canvas();
 }
 
 
@@ -126,6 +126,6 @@ void render_main() {
     // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
     // forces us to redraw the background on every render instead of having it
     // on a layer underneath.
-    draw_animation2(main_canvas, states.c_animation_index);
+    draw_animation2(c_main_canvas, states.c_animation_index);
 #endif
 }
