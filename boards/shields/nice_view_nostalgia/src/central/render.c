@@ -1,0 +1,131 @@
+#include "../../include/central/render.h"
+
+#include <ctype.h>
+#include <lvgl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <zephyr/sys/util.h>
+#include "../../include/colors.h"
+#include "../../include/central/initialize_listeners.h"
+#include "../../include/fonts/pixel_custom.h"
+#include "../../include/main.h"
+#include "../../include/utils/draw_battery.h"
+#include "../../include/utils/draw_animation2.h"
+#include "../../include/utils/draw_bluetooth_searching.h"
+#include "../../include/utils/draw_bluetooth_logo_outlined.h"
+#include "../../include/utils/draw_bluetooth_logo.h"
+#include "../../include/utils/draw_usb_logo.h"
+#include "../../include/utils/rotate_connectivity_canvas.h"
+#include "../../include/utils/rotate_layer_canvas.h"
+
+void render_battery() {
+    lv_canvas_fill_bg(battery_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
+
+    draw_battery(battery_canvas, 7, 4, states.battery);
+}
+
+static void render_bluetooth_logo() {
+    if (states.connectivity.active_profile_bonded) {
+        if (states.connectivity.active_profile_connected) {
+            draw_bluetooth_logo(connectivity_canvas, 18, 4);
+        } else {
+            draw_bluetooth_logo_outlined(connectivity_canvas, 18, 4);
+        }
+    } else {
+        draw_bluetooth_searching(connectivity_canvas, 18, 4);
+    }
+}
+
+static void render_bluetooth_profile_index() {
+    lv_draw_label_dsc_t label_dsc;
+    lv_draw_label_dsc_init(&label_dsc);
+    label_dsc.color = FOREGROUND_COLOR;
+    label_dsc.font = &pixel_custom;
+    label_dsc.align = LV_TEXT_ALIGN_RIGHT;
+
+    static const unsigned pixel_custom_height = 19;
+    static const unsigned padding_y = (CONNECTIVITY_CANVAS_AVAILABLE_HEIGHT - pixel_custom_height) / 2;
+    static const unsigned width = CONNECTIVITY_CANVAS_WIDTH - 18;
+    static const char bluetooth_profile_label[5][2] = {"1", "2", "3", "4", "5"};
+    const char* label = bluetooth_profile_label[states.connectivity.active_profile_index];
+   
+    lv_canvas_draw_text(connectivity_canvas, 0, padding_y, width, &label_dsc, label);
+}
+
+static void render_bluetooth_connectivity() {
+    render_bluetooth_logo();
+    render_bluetooth_profile_index();
+}
+
+static void render_usb_connectivity() {
+    draw_usb_logo(connectivity_canvas, 11, 8);
+}
+
+void render_connectivity() {
+    lv_canvas_fill_bg(connectivity_canvas, BACKGROUND_COLOR, LV_OPA_COVER);
+
+    switch (states.connectivity.selected_endpoint.transport) {
+        case ZMK_TRANSPORT_BLE: {
+            render_bluetooth_connectivity();
+            break;
+        }
+        case ZMK_TRANSPORT_USB: {
+            render_usb_connectivity();
+            break;
+        }
+    }
+
+    rotate_connectivity_canvas();
+}
+
+void render_layer() {
+
+    // Capitalize the layer name if given or use the layer number otherwise.
+    char* text = NULL;
+    if (states.layer.name == NULL) {
+        text = malloc(10 * sizeof(char));
+        sprintf(text, "LAYER %i", states.layer.index);
+    }
+    else {
+        text = malloc((strlen(states.layer.name) + 1) * sizeof(char));
+        for (unsigned i = 0; states.layer.name[i] != '\0'; i++) {
+            text[i] = toupper(states.layer.name[i]);
+        }
+        text[strlen(states.layer.name)] = '\0';
+    }
+
+    // Magic number. The height of the font from the baseline to the ascender
+    // height is 34px, but halving the space remaining of the full height gives
+    // us another value ((68px - 34px) / 2 = 17px). 
+    static const unsigned text_y_offset = 0;
+
+    lv_draw_label_dsc_t layer_name_dsc;
+    lv_draw_label_dsc_init(&layer_name_dsc);
+    layer_name_dsc.color = FOREGROUND_COLOR;
+    layer_name_dsc.font = &pixel_custom;
+    layer_name_dsc.align = LV_TEXT_ALIGN_CENTER;
+
+    lv_canvas_draw_text(
+        layer_canvas,
+        0,
+        text_y_offset,
+        LAYER_CANVAS_WIDTH,
+        &layer_name_dsc,
+        text
+    );
+
+    free(text);
+    text = NULL;
+    
+    rotate_layer_canvas();
+}
+
+
+void render_main() {
+#if IS_ENABLED(CONFIG_NICE_VIEW_90'BORN_BACKGROUND)
+    // Unfortunately, text transparency does not seem to work in LVGL 8.3. This
+    // forces us to redraw the background on every render instead of having it
+    // on a layer underneath.
+    draw_animation2(main_canvas, states.c_animation_index);
+#endif
+}
